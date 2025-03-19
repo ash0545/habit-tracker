@@ -7,7 +7,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const habitList = document.getElementById("habit-list");
 
   // {name: string, completed: boolean}
-  const habits = [];
+  let habits = [];
+
+  // save habits to localStorage
+  function saveHabits() {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }
+
+  // load existing habits from localStorage
+  function loadhabits() {
+    const storedHabits = localStorage.getItem("habits");
+    if (storedHabits) {
+      habits = JSON.parse(storedHabits);
+    }
+  }
 
   // render habits list
   function renderHabits() {
@@ -35,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleButton.textContent = habit.completed ? "Undo" : "Done";
       toggleButton.addEventListener("click", () => {
         habits[index].completed = !habits[index].completed;
+        saveHabits();
         renderHabits();
       });
 
@@ -51,7 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (habitName !== "") {
       habits.push({ name: habitName, completed: false });
       habitInput.value = "";
+      saveHabits();
       renderHabits();
     }
   });
+
+  // initial => load and display
+  loadhabits();
+  renderHabits();
 });
