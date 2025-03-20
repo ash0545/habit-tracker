@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : "bg-white dark:bg-gray-800 p-4 rounded shadow";
       habitCard.className = habitCardClass + " flex flex-col space-y-2";
 
-      // habit name and toggle
+      // habit name and action buttons
       const topRow = document.createElement("div");
       topRow.className = "flex justify-between items-center";
 
@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (todayCompleted) {
         habitTitle.classList.add("line-through", "text-gray-100");
       }
+
+      const buttonContainer = document.createElement("div");
+      buttonContainer.className = "flex items-center space-x-2";
 
       // toggle button for habit completion
       const toggleButton = document.createElement("button");
@@ -85,8 +88,23 @@ document.addEventListener("DOMContentLoaded", () => {
         renderHabits();
       });
 
+      // delete button for habit deletion
+      const deleteButton = document.createElement("button");
+      deleteButton.className =
+        "px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 flex items-center";
+      deleteButton.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete`;
+
+      deleteButton.addEventListener("click", () => {
+        habits.splice(index, 1);
+        saveHabits();
+        renderHabits();
+      });
+
+      buttonContainer.appendChild(toggleButton);
+      buttonContainer.appendChild(deleteButton);
+
       topRow.appendChild(habitTitle);
-      topRow.appendChild(toggleButton);
+      topRow.appendChild(buttonContainer);
 
       // weekly progress display
       const weeklyProgress = getWeeklyProgress(habit);
