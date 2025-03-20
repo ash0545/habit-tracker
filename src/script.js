@@ -73,8 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // toggle button for habit completion
       const toggleButton = document.createElement("button");
       toggleButton.className =
-        "px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600";
-      toggleButton.textContent = todayCompleted ? "Undo" : "Done";
+        "px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center";
+      toggleButton.innerHTML = todayCompleted
+        ? `<i data-lucide="x-circle" class="w-4 h-4 mr-1"></i> Undo`
+        : `<i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Done`;
 
       toggleButton.addEventListener("click", () => {
         if (!habit.history) habit.history = {};
@@ -97,6 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
       habitCard.appendChild(progressText);
 
       habitList.appendChild(habitCard);
+
+      // initialize lucide icons for dynamically added elements
+      if (window.lucide) {
+        lucide.createIcons();
+      }
     });
   }
 
@@ -114,4 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // initial => load and display
   loadhabits();
   renderHabits();
+  // initialize lucide icons for static elements
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 });

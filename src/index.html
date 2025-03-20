@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./output.css" rel="stylesheet" />
     <script defer src="script.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
   <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <div class="container mx-auto p-6">
@@ -21,8 +22,9 @@
         </div>
         <button
           id="add-habit-btn"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center"
         >
+          <i data-lucide="plus" class="w-5 h-5 mr-2"> </i>
           Add Habit
         </button>
       </div>
@@ -30,11 +32,7 @@
       <div
         id="habit-list"
         class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-      >
-    <div>Hello</div>
-    <div>Hello</div>
-    <div>Hello</div>
-    <div>Hello</div>
+      ></div>
     </div>
   </body>
 </html>
