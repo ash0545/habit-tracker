@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // load existing habits from localStorage
-  function loadhabits() {
+  function loadHabits() {
     const storedHabits = localStorage.getItem("habits");
     if (storedHabits) {
       habits = JSON.parse(storedHabits);
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // render habits list
-  function renderHabits() {
+  function renderHabits(newIndex = null) {
     habitList.innerHTML = ""; // clear current list
     habits.forEach((habit, index) => {
       const todayString = getTodayDate();
@@ -58,26 +58,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const habitCardClass = todayCompleted
         ? "bg-green-100 dark:bg-green-800 p-4 rounded shadow "
         : "bg-white dark:bg-gray-800 p-4 rounded shadow";
-      habitCard.className = habitCardClass + " flex flex-col space-y-2";
+      habitCard.className =
+        habitCardClass +
+        " flex flex-col space-y-2 transition-transform duration-300 hover:scale-105 w-full";
+
+      // add fade-in only for newest habit
+      if (index === newIndex) {
+        habitCard.classList.add("fade-in");
+      }
 
       // habit name and action buttons
       const topRow = document.createElement("div");
-      topRow.className = "flex justify-between items-center";
+      topRow.className = "flex flex-wrap justify-between items-center w-full";
 
       // strikethrough if habit completed
       const habitTitle = document.createElement("span");
+      habitTitle.className = "break-words whitespace-normal w-full";
       habitTitle.textContent = habit.name;
       if (todayCompleted) {
-        habitTitle.classList.add("line-through", "text-gray-100");
+        habitTitle.classList.add("line-through", "text-gray-400");
       }
 
       const buttonContainer = document.createElement("div");
-      buttonContainer.className = "flex items-center space-x-2";
+      buttonContainer.className = "flex flex-wrap items-center space-x-2";
 
       // toggle button for habit completion
       const toggleButton = document.createElement("button");
       toggleButton.className =
-        "px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center";
+        "px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center transition duration-300 hover:scale-105";
       toggleButton.innerHTML = todayCompleted
         ? `<i data-lucide="x-circle" class="w-4 h-4 mr-1"></i> Undo`
         : `<i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Done`;
@@ -92,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // delete button for habit deletion
       const deleteButton = document.createElement("button");
       deleteButton.className =
-        "px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 flex items-center";
+        "px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 flex items-center transition duration-300 hover:scale-105";
       deleteButton.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete`;
 
       deleteButton.addEventListener("click", () => {
@@ -151,10 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
   addHabitButton.addEventListener("click", () => {
     const habitName = habitInput.value.trim();
     if (habitName !== "") {
-      habits.push({ name: habitName, completed: false });
+      habits.push({ name: habitName, history: {} });
       habitInput.value = "";
       saveHabits();
-      renderHabits();
+      renderHabits(habits.length - 1);
     }
   });
 
@@ -169,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // initial => load and display
   loadTheme();
-  loadhabits();
+  loadHabits();
   renderHabits();
   // initialize lucide icons for static elements
   if (window.lucide) {
