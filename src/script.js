@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const habitInput = document.getElementById("habit-input");
   const addHabitButton = document.getElementById("add-habit-btn");
   const habitList = document.getElementById("habit-list");
+  const themeToggle = document.getElementById("theme-toggle");
 
   // {name: string, history: {'YYYY-MM-DD': boolean}}
   let habits = [];
@@ -125,6 +126,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function updateThemeIcon() {
+    if (document.body.classList.contains("dark")) {
+      themeToggle.innerHTML = `<i data-lucide="sun" class="w-5 h-5"></i>`;
+    } else {
+      themeToggle.innerHTML = `<i data-lucide="moon" class="w-5 h-5"></i>`;
+    }
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+
+  function loadTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme == "dark") {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+    updateThemeIcon();
+  }
+
   // handle add habit button
   addHabitButton.addEventListener("click", () => {
     const habitName = habitInput.value.trim();
@@ -136,7 +158,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem(
+      "theme",
+      document.body.classList.contains("dark") ? "dark" : "light"
+    );
+    updateThemeIcon();
+  });
+
   // initial => load and display
+  loadTheme();
   loadhabits();
   renderHabits();
   // initialize lucide icons for static elements
